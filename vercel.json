@@ -1,5 +1,9 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    {
+      "source": "/api/sort-excel",
+      "destination": "http://64.23.221.210:3000/api/sort-excel"
+    }
   ]
 }
