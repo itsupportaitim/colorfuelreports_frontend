@@ -168,56 +168,64 @@ video.background-video {
         }
     }
 
+    
     processButton.addEventListener('click', async () => {
-        if (!selectedFile) return;
+    if (!selectedFile) return;
 
-        processButton.disabled = true;
-        processButton.textContent = 'Processing...';
-        downloadLink.style.display = 'none';
+    processButton.disabled = true;
+    processButton.textContent = 'Processing...';
+    downloadLink.style.display = 'none';
 
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+    // Create safe filename for upload
+    const safeName = selectedFile.name
+        .replace(/\.[^/.]+$/, '')       // remove extension
+        .normalize("NFKD")              // normalize accented chars
+        .replace(/[^\x00-\x7F]/g, '')   // strip non-ASCII (em dash, emoji, etc.)
+        .replace(/[^\w.\- ]/g, '_')     // replace unsafe chars with _
+        .trim() + '.xlsx';              // add extension back
 
-        try {
-            const response = await fetch('/api/sort-excel', {
-                method: 'POST',
-                body: formData,
-            });
+    // Create a new File object with safe name
+    const renamedFile = new File([selectedFile], safeName, { type: selectedFile.type });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Processing failed');
-            }
+    // Prepare form data with renamed file
+    const formData = new FormData();
+    formData.append('file', renamedFile);
 
-            // Get the blob from response
-            const blob = await response.blob();
+    try {
+        const response = await fetch('/api/sort-excel', {
+            method: 'POST',
+            body: formData,
+        });
 
-            // Create download URL
-            const url = window.URL.createObjectURL(blob);
-
-            // Generate filename
-            const originalName = selectedFile.name.replace(/\.[^/.]+$/, '');
-            const safeName = originalName
-                .normalize("NFKD")               // separate accents from letters
-                .replace(/[^\x00-\x7F]/g, '')    // remove non-ASCII (em dash, emoji, etc.)
-                .replace(/[^\w.\- ]/g, '_')      // replace other unsafe symbols with _
-                .trim();
-            const downloadFileName = `${safeName}_N.xlsx`;
-
-            // Set up download link
-            downloadLink.href = url;
-            downloadLink.download = downloadFileName;
-            downloadLink.textContent = `Download ${downloadFileName}`;
-            downloadLink.style.display = 'inline-block';
-
-        } catch (error) {
-            console.error('Error:', error);
-            alert(`Processing failed: ${error.message}`);
-        } finally {
-            processButton.disabled = false;
-            processButton.textContent = 'Process File';
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Processing failed');
         }
-    });
+
+        // Get the blob from response
+        const blob = await response.blob();
+
+        // Create download URL
+        const url = window.URL.createObjectURL(blob);
+
+        // Generate safe name for download as well
+        const safeDownloadName = safeName.replace(/\.[^/.]+$/, '') + '_N.xlsx';
+
+        // Set up download link
+        downloadLink.href = url;
+        downloadLink.download = safeDownloadName;
+        downloadLink.textContent = `Download ${safeDownloadName}`;
+        downloadLink.style.display = 'inline-block';
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert(`Processing failed: ${error.message}`);
+    } finally {
+        processButton.disabled = false;
+        processButton.textContent = 'Process File';
+    }
+});
+
 </script>
 
 </body>
