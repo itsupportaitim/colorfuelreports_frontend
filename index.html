@@ -198,7 +198,7 @@ video.background-video {
             // Generate filename
             const originalName = selectedFile.name.replace(/\.[^/.]+$/, '');
             const safeName = originalName.replace(/[^\w.\- ]/g, '_');
-            const downloadFileName = `${safeName}.xlsx`;
+            const downloadFileName = `${safeName}_N.xlsx`;
 
             // Set up download link
             downloadLink.href = url;
