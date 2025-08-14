@@ -197,7 +197,11 @@ video.background-video {
 
             // Generate filename
             const originalName = selectedFile.name.replace(/\.[^/.]+$/, '');
-            const safeName = originalName.replace(/[^\w.\- ]/g, '_');
+            const safeName = originalName
+                .normalize("NFKD")               // separate accents from letters
+                .replace(/[^\x00-\x7F]/g, '')    // remove non-ASCII (em dash, emoji, etc.)
+                .replace(/[^\w.\- ]/g, '_')      // replace other unsafe symbols with _
+                .trim();
             const downloadFileName = `${safeName}_N.xlsx`;
 
             // Set up download link
