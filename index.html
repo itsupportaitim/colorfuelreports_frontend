@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EXCEL PROCESSOR</title>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #2c2c2c); /* Dark matte black with stormy undertones */
+      font-family: 'Montserrat', sans-serif;
+      background: #000; /* Dark matte black with stormy undertones */
       min-height: 100vh;
       margin: 0;
       display: flex;
@@ -23,7 +24,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('./public/tailungbackground.mp4') no-repeat center/cover; /* Thunderous texture */
   opacity: 0.2;
   z-index: 0;
 }
@@ -44,18 +44,18 @@ video.background-video {
       z-index: 1;
     }
     .logo {
-      max-width: 200px;
+      max-width: 250px;
       height: auto;
-      filter: drop-shadow(0 0 15px #ffd700); /* Glowing effect for eye-on-pyramid logo */
+      filter: drop-shadow(0 0 15px #fff); /* Glowing effect for eye-on-pyramid logo */
       animation: pulseGlow 2s infinite alternate;
     }
     .upload-area {
-      border: 3px dashed #ffd700; /* Gold to match glowing logo */
+      /* border: 3px dashed #fff; Gold to match glowing logo */
       padding: 20px;
       border-radius: 10px;
-      background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark matte */
-      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3); /* Subtle gold shadow */
-      margin: 20px 0;
+      background: #fff; /* Semi-transparent dark matte */
+      /* box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3); Subtle gold shadow */
+      margin: 60px 0 20px 0;
       transition: transform 0.3s, border-color 0.3s;
     }
     .upload-area.drag-active {
@@ -64,7 +64,8 @@ video.background-video {
     }
     .upload-area p {
       margin: 10px 0;
-      color: #ccc; /* Stormy gray text */
+      color: #000; /* Stormy gray text */
+
       font-weight: bold;
     }
     .process-button {
@@ -101,8 +102,8 @@ video.background-video {
       color: #ffeb3b; /* Brighter gold on hover */
     }
     @keyframes pulseGlow {
-      from { filter: drop-shadow(0 0 10px #ffd700); }
-      to { filter: drop-shadow(0 0 20px #ffd700); }
+      from { filter: drop-shadow(0 0 10px #fff); }
+      to { filter: drop-shadow(0 0 20px #fff); }
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
@@ -111,12 +112,8 @@ video.background-video {
   </style>
 </head>
 <body>
-    <video class="background-video" autoplay loop muted playsinline>
-  <source src="./public/tailungbackground.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
   <div class="container">
-    <img src="./public/tailung.jpg" alt="My Brand Logo" class="logo">
+    <img src="./public/aitim.png" alt="My Brand Logo" class="logo">
     <div id="uploadArea" class="upload-area">
       <input type="file" id="fileInput" accept=".xls,.xlsx" style="display: none;">
       <p>Drag and drop your Excel file here, or click to select</p>
@@ -225,7 +222,8 @@ video.background-video {
         processButton.textContent = 'Process File';
     }
 });
-
+const colors = ["#AD2729", "#F5F53B", "#2183B4", "#27AD5A", "#FFFFFF", "#8727AD"];
+processButton.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 </script>
 
 </body>
